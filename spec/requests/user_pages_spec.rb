@@ -4,7 +4,7 @@ describe "UserPages" do
 
   subject { page }
 
-  describe "singup page" do
+  describe "signup page" do
   	
   	before { visit signup_path }
   	let (:submit) {"Create my account"}
@@ -29,13 +29,23 @@ describe "UserPages" do
     		fill_in "Confirmation", with: "foobar"
     	end
 
-    	it "should carete a user" do
+    	it "should create a user" do
     		expect do
     			click_button submit
-    		end.to change(User, count).by(1)
+    		end.to change(User, :count).by(1)
     	end
 
-	end
+      describe "after saving the user" do
+        before { click_button submit }
+        
+        it { should have_link 'Sign out' }
+
+        describe "followed by signout" do
+          before { click_link 'Sign out'}
+          it { should have_link 'Sign in'}
+        end
+	   end
+   end
 
   end
 
