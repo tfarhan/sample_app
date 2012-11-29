@@ -8,6 +8,8 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  password_digest :string(255)
+#  remember_token  :string(255)
+#  admin           :boolean          default(FALSE)
 #
 
 require 'spec_helper'
@@ -23,17 +25,29 @@ describe User do
 
   subject { @user }
   
-  it {should respond_to :name }
-  it {should respond_to :email }
-  it {should respond_to :password_digest }
-  it {should respond_to :password }
-  it {should respond_to :password_confirmation }
-  it {should respond_to :authenticate }
-  it {should respond_to :remember_token }
+  it { should respond_to :name }
+  it { should respond_to :email }
+  it { should respond_to :password_digest }
+  it { should respond_to :password }
+  it { should respond_to :password_confirmation }
+  it { should respond_to :authenticate }
+  it { should respond_to :remember_token }
+  it { should respond_to :admin }
+  it { should respond_to :authenticate }
 
+  it { should be_valid }
+  it { should_not be_admin }
+
+  describe "with admin attributes set to true" do
+    before do
+      @user.save!
+      @user.toggle! :admin
+    end
+
+    it { should be_admin }
+  end
 
   describe "when attributes are valid" do
-  	it {should be_valid}
   	it "should be have valid email format" do
   		addresses = %w[user@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn]
       	addresses.each do |valid_address|
